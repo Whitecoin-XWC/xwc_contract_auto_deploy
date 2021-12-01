@@ -110,6 +110,11 @@ class XwcContractLoader:
             raise SystemExit(
                 f"Failed to connect XWC environment via RPC call! Please check if XWC testing environment runs well!")
 
+        _err = res.get('error')
+        if _err is not None:
+            raise SystemExit(
+                f"Failed to deploy contract! {_err.get('message')}")
+
         self.contract_id = res.get('result').get('contract_id')
         if self.contract_id is None:
             print(f"Failed to deploy {self.gpc_file} to the local XWC environment:")
@@ -134,8 +139,9 @@ if __name__ == '__main__':
 
     parser.add_argument('ass_file_path', help='The input .ass file')
     parser.add_argument('meta_file_path', help='The input .meta.json file')
-
+    parser.add_argument('--xwc_user', default="xwc", required=False, help='The XWC user used for deploying the contract')
     parser.add_argument('--nodeploy', action="store_true", help='generate .gpc file only, do not deploy.')
+
     args = parser.parse_args()
 
     xwcContract = XwcContractLoader(args.ass_file_path, args.meta_file_path)
@@ -147,6 +153,6 @@ if __name__ == '__main__':
         print("Ignore deploying with flag '--nodeploy'...")
     else:
         print("Start deploying the XWC smart contract")
-        xwcContract.deploy(XWC_RPC_ADDR, "xwc")
+        xwcContract.deploy(XWC_RPC_ADDR, args.xwc_user)
 
     print("Finished!")
