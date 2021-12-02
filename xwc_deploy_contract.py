@@ -49,7 +49,8 @@ class XwcContractLoader:
         self.contract_id = None
 
         # file_name = Path(ass_path).name.split('.')[0]
-        file_name = os.path.basename(self.ass_file).split(".")[0]
+        # file_name = os.path.basename(self.ass_file).split(".")[0]
+        file_name = self.ass_file.split(".")[0]
 
         self.out_file = file_name + ".out"
         self.gpc_file = file_name + ".gpc"
@@ -102,10 +103,9 @@ class XwcContractLoader:
         deploy smart contract by RPC call
         :return:
         """
-        # res = rpc_request(rpc_addr, "register_contract", [xwc_user, "0.0001", "500000", self.gpc_file])
 
         res = rpc_request(rpc_addr, "register_contract",
-                          [xwc_user, "0.0001", "500000", f"{os.path.abspath('.')}/{self.gpc_file}"])
+                          [xwc_user, "0.0001", "500000", self.gpc_file])
         if res is None:
             raise SystemExit(
                 f"Failed to connect XWC environment via RPC call! Please check if XWC testing environment runs well!")
