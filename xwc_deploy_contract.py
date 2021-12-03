@@ -6,7 +6,8 @@ import requests
 import argparse
 
 UVM_EXE = "uvm_ass.exe"
-PACKAGE_EXE = "package_gpc.exe"
+#PACKAGE_EXE = "package_gpc.exe"
+PACKAGE_EXE = "go_package_gpc.exe"
 XWC_RPC_ADDR = "127.0.0.1:29000"
 
 
@@ -53,7 +54,7 @@ class XwcContractLoader:
         file_name = self.ass_file.split(".")[0]
 
         self.out_file = file_name + ".out"
-        self.gpc_file = file_name + ".gpc"
+        self.gpc_file = self.out_file + ".gpc"
 
         # clean the output files
         if os.path.exists(self.out_file):
@@ -82,7 +83,8 @@ class XwcContractLoader:
         calling package_gpc.exe to generate result.gpc
         :return:
         """
-        _cmd = f"{PACKAGE_EXE} {self.out_file} {self.meta_file}"
+        #_cmd = f"{PACKAGE_EXE} {self.out_file} {self.meta_file}"
+        _cmd = f"{PACKAGE_EXE} -package -binary-code={self.out_file} -meta={self.meta_file}"
         print(f"Running command '{_cmd}'")
         subprocess.run(_cmd,
                        shell=True,
